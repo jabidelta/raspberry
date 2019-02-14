@@ -1,0 +1,55 @@
+<html>
+  <head>
+  <title>LineCharts</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" >
+	var jsonData;
+	function myCallback(dataWeGotViaJsonp){
+	jsonData= dataWeGotViaJsonp['feeds'];
+	};
+	var jsonData;
+	function myCallback1(dataWeGotViaJsonp1){
+	jsonData1= dataWeGotViaJsonp1['feeds'];
+	};
+  </script>
+  <script  type="text/javascript" src="https://api.thingspeak.com/channels/702908/feeds.json?result=10&api_key=EFOA7V3LPRZXDZEZ&callback=myCallback">
+ </script>
+ <script  type="text/javascript" src="https://api.thingspeak.com/channels/702909/feeds.json?result=10&api_key=XB5FQLAEIS6YJ0ZE&callback=myCallback1">
+ </script>
+ <script
+  <script  type="text/javascript">
+  google.charts.load('current',{'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+ 
+	function drawChart(){
+	  var data = new google.visualization.DataTable();
+	  data.addColumn('datetime', 'Time');
+	  data.addColumn('number', 'TEMP');
+	  data.addColumn('number', 'HUM');
+	  for(var i=0; i<jsonData.length; i++) {
+		var timestamp = jsonData[i]['created_at'];
+		var temp =  jsonData[i]['field1'];
+		var hum =  jsonData[i]['field2'];
+		data.addRow([new Date(timestamp),parseFloat(temp), parseFloat(hum)]);
+		timestamp = jsonData1[i]['created_at'];
+		temp =  jsonData1[i]['field1'];
+		hum =  jsonData1[i]['field2'];
+		data.addRow([new Date(timestamp),parseFloat(temp), parseFloat(hum)]);
+		};
+		var options = {
+			title: 'Estation Meter',legend: {position: 'bottom'},
+			curveType: 'function', colors: ['red', 'blue'],
+			series: {0: {targetAxisIndex: 0}, 1: {targetAxisIndex: 1}},
+			vAxes: {0: {title: 'TEMP'}, 1: {title: '%HUM'}}
+		}
+		
+		var  chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+		chart.draw(data, options);
+	}
+  </script>
+  </head>
+  <body>
+  <h1>ESTATION 1</h1>
+   <div id="curve_chart"> </div>
+  </body>
+</html>
